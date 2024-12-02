@@ -1,0 +1,112 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Reservation } from './reservation.entity';
+import { ParkingPlace } from '../parking-places/parking-place.entity';
+import { Repository } from 'typeorm';
+import { CreateReservationDto } from './create-reservation.dto';
+import { DateTime } from 'luxon';
+
+@Injectable()
+export class ReservationsService {
+  constructor(
+    @Inject('RESERVATION_REPOSITORY')
+    private readonly reservationRepositiry: Repository<Reservation>,
+    @Inject('PARKING_PLACE_REPOSITORY')
+    private readonly parkingPlaceRepository: Repository<ParkingPlace>,
+  ) {}
+
+  async findAll(parkingPlaceLabel: string) {
+    const reservations =
+      (await this.reservationRepositiry.find({
+        select: {
+          id: true,
+          date: true,
+          parkingPlace: {
+            id: true,
+          },
+        },
+        relations: { parkingPlace: true },
+        where: {
+          parkingPlace: {
+            label: parkingPlaceLabel,
+          },
+        },
+      })) || [];
+
+    console.log(`Reservations for place: ${parkingPlaceLabel}`, reservations);
+
+    return reservations;
+  }
+
+  async deleteOne(id: number) {
+    const reservation = await this.reservationRepositiry.findOne({
+      where: { id },
+    });
+    if (!reservation) {
+      throw new Error(`Reservation ${id} not found`);
+    }
+    await this.reservationRepositiry.delete(id);
+    return id;
+  }
+
+  async createOne(reservation: CreateReservationDto) {
+    const parkingPlace = await this.parkingPlaceRepository.findOne({
+      where: { id: reservation.parkingPlaceId },
+    });
+
+    if (!parkingPlace) {
+      throw new Error(
+        `Parking place id: ${reservation.parkingPlaceId} doesn't exist`,
+      );
+    }
+
+    const newReservationDate = DateTime.fromJSDate(reservation.date).plus({
+      hour: 3,
+    });
+    const now = DateTime.now().startOf('day');
+    if (newReservationDate < now) {
+      throw new Error(
+        `It is not possible to make a reservation to the past day: ${reservation.date}`,
+      );
+    }
+
+    const existedReservation = await this.reservationRepositiry.findOne({
+      where: {
+        parkingPlace: {
+          id: reservation.parkingPlaceId,
+        },
+        date: reservation.date,
+      },
+    });
+
+    if (existedReservation) {
+      throw new Error(
+        `The date: ${reservation.date} for parking place: ${reservation.parkingPlaceId} already reserved`,
+      );
+    }
+
+    let numberOfPossibleDays = 0;
+    if (now.weekday >= 4) {
+      numberOfPossibleDays = 11 - (now.weekday - 4);
+    } else {
+      numberOfPossibleDays = 11 - (now.weekday + 4);
+    }
+
+    if (
+      now.plus({ days: numberOfPossibleDays }).startOf('day') >
+      newReservationDate
+    ) {
+      throw new Error(
+        `Today it is possible to make a reservation only ${numberOfPossibleDays} in advance.`,
+      );
+    }
+
+    const newReservation = await this.reservationRepositiry.create({
+      date: reservation.date,
+      parkingPlace,
+    });
+
+    const result = await this.reservationRepositiry.save(newReservation);
+
+    return result.id;
+  }
+}
