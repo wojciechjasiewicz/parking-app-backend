@@ -1,19 +1,22 @@
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ConfigService } from '@nestjs/config';
 
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
-    useFactory: async () => {
+    inject: [ConfigService],
+    useFactory: async (configService: ConfigService) => {
+      console.log(configService);
       const dataSource = new DataSource({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'yourUsername',
-        password: 'yourPassword',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.user'),
+        password: configService.get<string>('database.password'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         migrations: ['dist/migration/*.js'],
-        database: 'postgres',
+        database: configService.get<string>('database.name'),
         namingStrategy: new SnakeNamingStrategy(),
       });
 
