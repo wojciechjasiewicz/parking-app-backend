@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { ConfigService } from '@nestjs/config';
+import { type } from 'node:os';
 
 export const databaseProviders = [
   {
@@ -18,6 +19,7 @@ export const databaseProviders = [
         migrations: ['dist/migration/*.js'],
         database: configService.get<string>('database.name'),
         namingStrategy: new SnakeNamingStrategy(),
+        ssl: true,
       });
 
       return dataSource.initialize();
