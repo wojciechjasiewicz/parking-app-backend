@@ -6,4 +6,5 @@ export default registerAs('database', () => ({
   password: process.env.DB_PASSWORD,
   host: process.env.DB_HOST,
   port: 5432,
+  useSSL: process.env.DB_USE_SSL === 'true',
 }));

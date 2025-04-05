@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Param,
@@ -9,7 +8,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ParkingMapsService } from './parking-maps.service';
-import { ParkingMap } from './parking-maps.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('parking-maps')
