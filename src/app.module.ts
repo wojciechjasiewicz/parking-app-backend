@@ -6,6 +6,8 @@ import { ParkingMapsModule } from './parking-maps/parking-maps.module';
 import * as multer from 'multer';
 import { ConfigModule } from '@nestjs/config';
 import databaseConfig from './config/database.config';
+import { OfficesModule } from './offices/offices.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import databaseConfig from './config/database.config';
     ParkingPlacesModule,
     ReservationsModule,
     ParkingMapsModule,
+    OfficesModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

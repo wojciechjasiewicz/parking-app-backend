@@ -1,5 +1,12 @@
 import { ParkingPlace } from 'src/parking-places/parking-place.entity';
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Office } from 'src/offices/office.entity';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class ParkingMap {
@@ -17,4 +24,7 @@ export class ParkingMap {
 
   @OneToMany(() => ParkingPlace, (parkingPlace) => parkingPlace.parkingMap)
   parkingPlaces: ParkingPlace[];
+
+  @ManyToOne(() => Office, (office) => office.parkingMaps)
+  office: Office;
 }

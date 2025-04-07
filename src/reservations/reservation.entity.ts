@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ParkingPlace } from '../parking-places/parking-place.entity';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 export class Reservation {
@@ -15,6 +16,10 @@ export class Reservation {
   @ManyToOne(() => ParkingPlace, (parkingPlace) => parkingPlace.reservations)
   @JoinColumn({ name: 'parking_place_id' })
   parkingPlace: ParkingPlace;
+
+  @ManyToOne(() => User, (user) => user.reservations)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 
   @Column()
   date: Date;
