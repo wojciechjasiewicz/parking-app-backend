@@ -1,13 +1,14 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Office } from './office.entity';
 import { Repository } from 'typeorm';
 import { GetOfficeListDto } from './get-office-list.dto';
 import { GetOfficeDto } from './get-office.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class OfficesService {
   constructor(
-    @Inject('OFFICE_REPOSITORY')
+    @InjectRepository(Office)
     private readonly officeRepositiry: Repository<Office>,
   ) {}
 

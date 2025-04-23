@@ -1,5 +1,5 @@
-import { ParkingPlace } from 'src/parking-places/parking-place.entity';
-import { Office } from 'src/offices/office.entity';
+import { ParkingPlace } from '../parking-places/parking-place.entity';
+import { Office } from '../offices/office.entity';
 import {
   Column,
   Entity,

@@ -6,7 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Reservation } from '../reservations/reservation.entity';
-import { ParkingMap } from 'src/parking-maps/parking-maps.entity';
+import { ParkingMap } from '../parking-maps/parking-maps.entity';
 
 @Entity()
 export class ParkingPlace {

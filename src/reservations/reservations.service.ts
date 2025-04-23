@@ -1,19 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Reservation } from './reservation.entity';
 import { ParkingPlace } from '../parking-places/parking-place.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './create-reservation.dto';
 import { DateTime } from 'luxon';
 import { User } from 'src/users/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ReservationsService {
   constructor(
-    @Inject('RESERVATION_REPOSITORY')
+    @InjectRepository(Reservation)
     private readonly reservationRepositiry: Repository<Reservation>,
-    @Inject('PARKING_PLACE_REPOSITORY')
+    @InjectRepository(ParkingPlace)
     private readonly parkingPlaceRepository: Repository<ParkingPlace>,
-    @Inject('USER_REPOSITORY')
+    @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 

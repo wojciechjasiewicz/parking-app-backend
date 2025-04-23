@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ParkingPlace } from '../parking-places/parking-place.entity';
-import { User } from 'src/users/user.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Reservation {

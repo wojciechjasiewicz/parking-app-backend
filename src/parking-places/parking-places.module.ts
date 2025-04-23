@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ParkingPlacesService } from './parking-places.service';
 import { ParkingPlacesController } from './parking-places.controller';
-import { DatabaseModule } from '../database/database.module';
-import { parkingPlaceProviders } from './parking-place-providers';
+import { ParkingPlace } from './parking-place.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([ParkingPlace])],
   controllers: [ParkingPlacesController],
-  providers: [...parkingPlaceProviders, ParkingPlacesService],
+  providers: [ParkingPlacesService],
 })
 export class ParkingPlacesModule {}

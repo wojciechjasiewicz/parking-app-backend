@@ -1,11 +1,12 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ParkingPlace } from './parking-place.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ParkingPlacesService {
   constructor(
-    @Inject('PARKING_PLACE_REPOSITORY')
+    @InjectRepository(ParkingPlace)
     private readonly parkingPlaceRepositiry: Repository<ParkingPlace>,
   ) {}
 

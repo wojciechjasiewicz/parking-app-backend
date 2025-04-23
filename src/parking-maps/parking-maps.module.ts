@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ParkingMapsController } from './parking-maps.controller';
 import { ParkingMapsService } from './parking-maps.service';
-import { parkingMapProviders } from './parking-maps-providers';
-import { DatabaseModule } from 'src/database/database.module';
-import { officeProviders } from 'src/offices/office-provider';
+import { Office } from 'src/offices/office.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ParkingMap } from './parking-maps.entity';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([Office, ParkingMap])],
   controllers: [ParkingMapsController],
-  providers: [...parkingMapProviders, ...officeProviders, ParkingMapsService],
+  providers: [ParkingMapsService],
 })
 export class ParkingMapsModule {}

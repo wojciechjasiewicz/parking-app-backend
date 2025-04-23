@@ -1,15 +1,16 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ParkingMap } from './parking-maps.entity';
 import { Repository } from 'typeorm';
 import { GetPakingMapListDto } from './get-parking-map-list.dto';
 import { Office } from 'src/offices/office.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ParkingMapsService {
   constructor(
-    @Inject('PARKING_MAP_REPOSITORY')
+    @InjectRepository(ParkingMap)
     private readonly parkingMapsRepository: Repository<ParkingMap>,
-    @Inject('OFFICE_REPOSITORY')
+    @InjectRepository(Office)
     private readonly officesRepository: Repository<Office>,
   ) {}
 
