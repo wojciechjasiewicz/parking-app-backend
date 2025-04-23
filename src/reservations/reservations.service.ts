@@ -4,6 +4,7 @@ import { ParkingPlace } from '../parking-places/parking-place.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './create-reservation.dto';
 import { DateTime } from 'luxon';
+import { User } from 'src/users/user.entity';
 
 @Injectable()
 export class ReservationsService {
@@ -12,6 +13,8 @@ export class ReservationsService {
     private readonly reservationRepositiry: Repository<Reservation>,
     @Inject('PARKING_PLACE_REPOSITORY')
     private readonly parkingPlaceRepository: Repository<ParkingPlace>,
+    @Inject('USER_REPOSITORY')
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async findAll(parkingPlaceLabel: string) {
@@ -59,6 +62,14 @@ export class ReservationsService {
       );
     }
 
+    const user = await this.userRepository.findOne({
+      where: { id: reservation.userId },
+    });
+
+    if (!user) {
+      throw new Error(`User id: ${reservation.userId} doesn't exist`);
+    }
+
     const newReservationDate = DateTime.fromJSDate(reservation.date).plus({
       hour: 3,
     });
@@ -103,6 +114,7 @@ export class ReservationsService {
     const newReservation = await this.reservationRepositiry.create({
       date: reservation.date,
       parkingPlace,
+      user,
     });
 
     const result = await this.reservationRepositiry.save(newReservation);

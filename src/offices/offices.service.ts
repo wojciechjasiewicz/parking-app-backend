@@ -21,10 +21,18 @@ export class OfficesService {
 
   async findById(id: number): Promise<GetOfficeDto> {
     const office = await this.officeRepositiry.findOne({
-      select: { id: true, name: true, parkingMaps: { id: true, name: true } },
+      select: {
+        id: true,
+        name: true,
+        parkingMaps: {
+          id: true,
+          name: true,
+          data: true,
+        },
+      },
       where: { id },
       relations: {
-        parkingMaps: true,
+        parkingMaps: { parkingPlaces: true },
       },
     });
 
