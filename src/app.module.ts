@@ -5,7 +5,6 @@ import { ReservationsModule } from './reservations/reservations.module';
 import { ParkingMapsModule } from './parking-maps/parking-maps.module';
 import * as multer from 'multer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-// import databaseConfig from './config/database.config';
 import { OfficesModule } from './offices/offices.module';
 import { UsersModule } from './users/users.module';
 import { typeOrmConfig } from './config/typeorm.config';

@@ -12,10 +12,11 @@ let config: DataSourceOptions = {
   username: `${process.env.DB_USER}`,
   password: `${process.env.DB_PASSWORD}`,
   database: `${process.env.DB_NAME}`,
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/migrations/*{.ts,.js}'],
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/../../db-migrations/*{.ts,.js}'],
   synchronize: false,
   namingStrategy: new SnakeNamingStrategy(),
+  migrationsRun: true,
 };
 
 if (process.env.DB_USE_SSL === 'true') {
@@ -25,4 +26,4 @@ if (process.env.DB_USE_SSL === 'true') {
 console.log('config: ', JSON.stringify(config));
 
 export const typeOrmConfig = registerAs('typeorm', () => config);
-export const connectionSource = new DataSource(config as DataSourceOptions);
+export default new DataSource(config as DataSourceOptions);
