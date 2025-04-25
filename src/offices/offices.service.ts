@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Office } from './office.entity';
 import { Repository } from 'typeorm';
 import { GetOfficeListDto } from './get-office-list.dto';
 import { GetOfficeDto } from './get-office.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateOfficeDto } from './create-office.dto';
 
 @Injectable()
 export class OfficesService {
@@ -42,5 +43,19 @@ export class OfficesService {
       name: office.name,
       maps: office.parkingMaps.map(({ id, name }) => ({ id, name })),
     };
+  }
+
+  async create({ name }: CreateOfficeDto): Promise<number> {
+    if (await this.officeRepositiry.exists({ where: { name } })) {
+      throw new BadRequestException(`Office ${name} already exists`);
+    }
+
+    const newOffice = await this.officeRepositiry.create({
+      name,
+    });
+
+    const result = await this.officeRepositiry.save(newOffice);
+
+    return result.id;
   }
 }
