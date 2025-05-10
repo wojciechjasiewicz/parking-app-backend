@@ -17,7 +17,9 @@ export class OfficesController {
 
   @Get()
   async findAll(): Promise<GetOfficeListDto> {
-    return await this.officesService.findAll();
+    const offices = await this.officesService.findAll();
+    console.log(`GET offices: `, offices);
+    return offices;
   }
 
   @Get('/:id')

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Get,
   Param,
   ParseIntPipe,
@@ -20,9 +21,16 @@ export class ParkingMapsController {
 
   @Get()
   async getMapList(
-    @Query('officeId', ParseIntPipe) officeId: number,
+    @Query('officeId')
+    officeId?: number,
   ): Promise<GetPakingMapListDto> {
-    return await this.parkingMapsService.getMapList(officeId);
+    const parkingMaps = await this.parkingMapsService.getMapList(
+      officeId !== undefined ? +officeId : officeId,
+    );
+
+    console.log(`GET Parking maps: `, parkingMaps);
+
+    return parkingMaps;
   }
 
   @Get('/:id')

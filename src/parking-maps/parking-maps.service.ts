@@ -54,7 +54,7 @@ export class ParkingMapsService {
     return id;
   }
 
-  async getMapList(officeId: number): Promise<GetPakingMapListDto> {
+  async getMapList(officeId?: number): Promise<GetPakingMapListDto> {
     const parkingMaps = await this.parkingMapsRepository.find({
       select: { id: true, name: true },
       where: { office: { id: officeId } },
