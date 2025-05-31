@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ParkingPlace } from './parking-place.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateParkingPlaceDto } from './create-parking-place.dto';
 import { ParkingMap } from 'src/parking-maps/parking-maps.entity';
+import { UpdateParkingPlaceDto } from './update-parking-place.dto';
+import { GetParkingPlaceDto } from './get-parking-place.dto';
 
 @Injectable()
 export class ParkingPlacesService {
@@ -18,7 +24,21 @@ export class ParkingPlacesService {
     const parkingPlaces = await this.parkingPlaceRepository.find({
       where: { parkingMap: { id: mapId } },
     });
+
     return parkingPlaces;
+  }
+
+  async getOne(id: number): Promise<GetParkingPlaceDto> {
+    const place = await this.parkingPlaceRepository.findOne({
+      select: { id: true, label: true, positionX: true, positionY: true },
+      where: { id },
+    });
+
+    if (!place) {
+      throw new NotFoundException(`Parking place ${id} not found`);
+    }
+
+    return place;
   }
 
   async createOne({
@@ -35,23 +55,35 @@ export class ParkingPlacesService {
       throw new NotFoundException(`Parking map ${mapId} doesn't exist`);
     }
 
-    const { identifiers } = await this.parkingPlaceRepository
-      .createQueryBuilder()
-      .insert()
-      .into(ParkingPlace)
-      .values({
-        label,
-        positionX: Math.round(positionX),
-        positionY: Math.round(positionY),
-        parkingMap,
-      })
-      .onConflict(
-        `("label") DO UPDATE SET position_x = EXCLUDED.position_x, position_y = EXCLUDED.position_y`,
-      )
-      .returning('id')
-      .execute();
+    const parkingPlace = await this.parkingPlaceRepository.create({
+      label,
+      positionX,
+      positionY,
+      parkingMap,
+    });
 
-    return identifiers[0]['id'] as number;
+    const result = await this.parkingPlaceRepository.save(parkingPlace);
+    return result.id;
+  }
+
+  async update(
+    id: number,
+    { label, positionX, positionY }: UpdateParkingPlaceDto,
+  ): Promise<Required<UpdateParkingPlaceDto>> {
+    const place = await this.parkingPlaceRepository.findOne({
+      where: { id },
+    });
+
+    if (!place) {
+      throw new BadRequestException(`Parking place ${id} not found`);
+    }
+
+    return await this.parkingPlaceRepository.save({
+      ...place,
+      label,
+      positionX,
+      positionY,
+    });
   }
 
   async deleteOne(id: number) {
@@ -59,9 +91,11 @@ export class ParkingPlacesService {
     const place = await this.parkingPlaceRepository.findOne({
       where: { id },
     });
+
     if (!place) {
-      throw new Error(`Parking place ${id} not found`);
+      throw new NotFoundException(`Parking place ${id} not found`);
     }
+
     await this.parkingPlaceRepository.delete(id);
     return id;
   }
