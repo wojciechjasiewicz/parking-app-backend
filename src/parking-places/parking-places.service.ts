@@ -7,7 +7,7 @@ import { ParkingPlace } from './parking-place.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateParkingPlaceDto } from './create-parking-place.dto';
-import { ParkingMap } from 'src/parking-maps/parking-maps.entity';
+import { ParkingMap } from '../parking-maps/parking-maps.entity';
 import { UpdateParkingPlaceDto } from './update-parking-place.dto';
 import { GetParkingPlaceDto } from './get-parking-place.dto';
 

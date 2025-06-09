@@ -1,8 +1,8 @@
-export class GetOfficeLisItemtDto {
+export class GetOfficeListItemDto {
   id: number;
   name: string;
 }
 
 export class GetOfficeListDto {
-  offices: GetOfficeLisItemtDto[];
+  offices: GetOfficeListItemDto[];
 }

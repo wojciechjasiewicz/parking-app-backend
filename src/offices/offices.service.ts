@@ -13,15 +13,15 @@ export class OfficesService {
     private readonly officeRepositiry: Repository<Office>,
   ) {}
 
-  async findAll(): Promise<GetOfficeListDto> {
+  async findAll(): Promise<GetOfficeListDto[]> {
     const offices = await this.officeRepositiry.find({
       select: { id: true, name: true },
     });
 
-    return { offices: offices.map(({ id, name }) => ({ id, name })) };
+    return offices.map(({ id, name }) => ({ id, name }));
   }
 
-  async findById(id: number): Promise<GetOfficeDto> {
+  async findOne(id: number): Promise<GetOfficeDto> {
     const office = await this.officeRepositiry.findOne({
       select: {
         id: true,
