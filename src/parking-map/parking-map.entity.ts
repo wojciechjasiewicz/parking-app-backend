@@ -1,12 +1,5 @@
-import { ParkingPlace } from '../parking-places/parking-place.entity';
-import { Office } from '../offices/office.entity';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  ManyToOne,
-} from 'typeorm';
+import { ParkingPlace } from './parking-place.entity';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class ParkingMap {
@@ -17,6 +10,9 @@ export class ParkingMap {
   name: string;
 
   @Column()
+  groupName: string;
+
+  @Column()
   fileType: string;
 
   @Column({ type: 'bytea' })
@@ -24,7 +20,4 @@ export class ParkingMap {
 
   @OneToMany(() => ParkingPlace, (parkingPlace) => parkingPlace.parkingMap)
   parkingPlaces: ParkingPlace[];
-
-  @ManyToOne(() => Office, (office) => office.parkingMaps)
-  office: Office;
 }

@@ -2,7 +2,7 @@ import { describe, test, before, after } from 'node:test';
 import assert from 'node:assert';
 
 import { Client } from 'pg';
-import { ParkingPlacesService } from './parking-places.service';
+import { ParkingPlacesService } from './parking-place.service';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 
 import { DataSource } from 'typeorm';

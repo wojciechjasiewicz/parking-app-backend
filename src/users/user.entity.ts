@@ -1,5 +1,4 @@
-import { Reservation } from '../reservations/reservation.entity';
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -11,7 +10,4 @@ export class User {
 
   @Column()
   surname: string;
-
-  @OneToMany(() => Reservation, (reservation) => reservation.user)
-  reservations: Reservation[];
 }
