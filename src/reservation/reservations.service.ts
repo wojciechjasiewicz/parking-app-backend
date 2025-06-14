@@ -4,7 +4,7 @@ import { ParkingPlace } from '../parking-places/parking-place.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './create-reservation.dto';
 import { DateTime } from 'luxon';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()

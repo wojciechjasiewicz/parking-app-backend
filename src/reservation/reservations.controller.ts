@@ -16,20 +16,22 @@ export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
   @Get()
-  async findAll(
-    @Query('placeLabel') parkingPlaceLabel: string,
+  async getReservationList(
+    @Query('placeId') parkingPlaceId: string,
   ): Promise<Reservation[]> {
-    return await this.reservationsService.findAll(parkingPlaceLabel);
-  }
-
-  @Delete(':id')
-  async deleteOne(@Param('id') reservationId: number): Promise<string> {
-    const id = await this.reservationsService.deleteOne(reservationId);
-    return `${id}`;
+    return await this.reservationsService.findAll(parkingPlaceId);
   }
 
   @Post()
-  async createOne(@Body() reservation: CreateReservationDto): Promise<number> {
+  async createReservation(
+    @Body() reservation: CreateReservationDto,
+  ): Promise<number> {
     return await this.reservationsService.createOne(reservation);
+  }
+
+  @Delete(':id')
+  async deleteReservation(@Param('id') reservationId: number): Promise<string> {
+    const id = await this.reservationsService.deleteOne(reservationId);
+    return `${id}`;
   }
 }

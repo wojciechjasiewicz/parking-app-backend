@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
-import { ParkingPlacesModule } from './parking-places/parking-places.module';
-import { ReservationsModule } from './reservations/reservations.module';
-import { ParkingMapsModule } from './parking-maps/parking-maps.module';
+import { ReservationsModule } from './reservation/reservations.module';
+import { ParkingMapsModule } from './parking-map/parking-map.module';
 import * as multer from 'multer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { OfficesModule } from './offices/offices.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './user/users.module';
 import { typeOrmConfig } from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -25,10 +23,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       storage: multer.memoryStorage(),
       limits: { fileSize: 1024 * 1024 * 5 },
     }),
-    ParkingPlacesModule,
     ReservationsModule,
     ParkingMapsModule,
-    OfficesModule,
     UsersModule,
   ],
 })
