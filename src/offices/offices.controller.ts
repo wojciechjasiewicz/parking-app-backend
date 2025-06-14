@@ -24,7 +24,7 @@ export class OfficesController {
 
   @Get('/:id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<GetOfficeDto> {
-    return await this.officesService.findById(id);
+    return await this.officesService.findOne(id);
   }
 
   @Post()
