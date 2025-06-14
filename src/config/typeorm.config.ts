@@ -1,9 +1,9 @@
-import { registerAs } from '@nestjs/config';
-import { config as dotenvConfig } from 'dotenv';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { registerAs } from '@nestjs/config'
+import { config as dotenvConfig } from 'dotenv'
+import { DataSource, type DataSourceOptions } from 'typeorm'
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 
-dotenvConfig({ path: '.env' });
+dotenvConfig({ path: '.env' })
 
 let config: DataSourceOptions = {
   type: 'postgres',
@@ -17,13 +17,13 @@ let config: DataSourceOptions = {
   synchronize: false,
   namingStrategy: new SnakeNamingStrategy(),
   migrationsRun: true,
-};
-
-if (process.env.DB_USE_SSL === 'true') {
-  config = { ...config, ssl: true };
 }
 
-console.log('config: ', JSON.stringify(config));
+if (process.env.DB_USE_SSL === 'true') {
+  config = { ...config, ssl: true }
+}
 
-export const typeOrmConfig = registerAs('typeorm', () => config);
-export default new DataSource(config as DataSourceOptions);
+console.log('config: ', JSON.stringify(config))
+
+export const typeOrmConfig = registerAs('typeorm', () => config)
+export default new DataSource(config as DataSourceOptions)
