@@ -3,13 +3,14 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ParkingPlace } from './parking-place.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateParkingPlaceDto } from './create-parking-place.dto';
-import { ParkingMap } from '../parking-maps/parking-maps.entity';
-import { UpdateParkingPlaceDto } from './update-parking-place.dto';
-import { GetParkingPlaceDto } from './get-parking-place.dto';
+
+import { ParkingPlace } from './entity/parking-place.entity';
+import { CreateParkingPlaceDto } from './dto/create-parking-place.dto';
+import { ParkingMap } from './entity/parking-map.entity';
+import { UpdateParkingPlaceDto } from './dto/update-parking-place.dto';
+import { GetParkingPlaceDto } from './dto/get-parking-place.dto';
 
 @Injectable()
 export class ParkingPlacesService {

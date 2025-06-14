@@ -1,9 +1,9 @@
 import { Client } from 'pg';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
-import { ParkingPlacesService } from './parking-places.service';
+import { ParkingPlacesService } from './parking-place.service';
 import { DataSourceOptions } from 'typeorm';
-import { ParkingPlace } from './parking-place.entity';
-import { ParkingMap } from '../parking-maps/parking-maps.entity';
+import { ParkingPlace } from './entity/parking-place.entity';
+import { ParkingMap } from './parking-map.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService, registerAs } from '@nestjs/config';

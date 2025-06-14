@@ -1,27 +1,35 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ParkingMap } from './parking-maps.entity';
+
+import { ParkingMap } from './entity/parking-map.entity';
 import { Repository } from 'typeorm';
-import { GetPakingMapListDto } from './get-parking-map-list.dto';
-import { Office } from 'src/offices/office.entity';
+import { GetPakingMapListDto } from './dto/get-parking-map-list.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GetParkingMapDto } from './dto/get-parking-map.dto';
 
 @Injectable()
-export class ParkingMapsService {
+export class ParkingMapService {
   constructor(
     @InjectRepository(ParkingMap)
     private readonly parkingMapsRepository: Repository<ParkingMap>,
-    @InjectRepository(Office)
-    private readonly officesRepository: Repository<Office>,
   ) {}
 
-  async findOne(id: number) {
+  async getMapList(groupName: string): Promise<GetPakingMapListDto> {
+    const parkingMaps = await this.parkingMapsRepository.find({
+      select: { id: true, name: true },
+      where: { groupName },
+    });
+
+    return {
+      parkingMaps: parkingMaps.map(({ id, name }) => ({ id, name })),
+    };
+  }
+
+  async findOne(id: number): Promise<GetParkingMapDto> {
     const parkingMap = await this.parkingMapsRepository.findOne({
       select: { id: true, name: true, data: true, parkingPlaces: true },
       relations: { parkingPlaces: true },
       where: { id },
     });
-
-    console.log(parkingMap);
 
     if (!parkingMap) {
       throw new NotFoundException(`Missing parking map: ${id}`);
@@ -32,36 +40,27 @@ export class ParkingMapsService {
 
   async create(
     imageMap: Express.Multer.File,
-    officeId: number,
+    groupName: string,
     mapName: string,
   ): Promise<number> {
-    const office = await this.officesRepository.findOne({
-      where: { id: officeId },
+    const parkingMap = await this.parkingMapsRepository.findOne({
+      where: { name: mapName, groupName },
     });
 
-    if (!office) {
-      throw new Error(`Office id: ${office.id} doesn't exist`);
+    if (parkingMap) {
+      throw new Error(
+        `Parking map ${mapName} in group ${groupName} already exists`,
+      );
     }
 
     const newParkingMap = await this.parkingMapsRepository.create({
       name: mapName,
       fileType: imageMap.mimetype,
       data: imageMap.buffer,
-      office,
+      groupName,
     });
 
     const { id } = await this.parkingMapsRepository.save(newParkingMap);
     return id;
-  }
-
-  async getMapList(officeId?: number): Promise<GetPakingMapListDto> {
-    const parkingMaps = await this.parkingMapsRepository.find({
-      select: { id: true, name: true },
-      where: { office: { id: officeId } },
-    });
-
-    return {
-      parkingMaps: parkingMaps.map(({ id, name }) => ({ id, name })),
-    };
   }
 }
