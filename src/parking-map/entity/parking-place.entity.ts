@@ -1,18 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ParkingMap } from './parking-map.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { ParkingMap } from "./parking-map.entity";
 
 @Entity()
 export class ParkingPlace {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 5 })
+  @Column({ type: "varchar", length: 5 })
   label: string;
 
-  @Column()
+  @Column({ type: "int" })
   positionX: number;
 
-  @Column()
+  @Column({ type: "int" })
   positionY: number;
 
   @ManyToOne(() => ParkingMap, (parkingMap) => parkingMap.parkingPlaces)

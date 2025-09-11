@@ -1,5 +1,5 @@
 export class UpdateParkingPlaceDto {
-  label?: string;
-  positionX?: number;
-  positionY?: number;
+  label?: string
+  positionX?: number
+  positionY?: number
 }

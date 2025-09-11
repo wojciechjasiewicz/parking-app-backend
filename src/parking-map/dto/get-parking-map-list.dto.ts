@@ -1,9 +1,9 @@
 export class GetParkingMapListItemDto {
-  id: number;
-  name: string;
-  groupName: string;
+  id: number
+  name: string
+  groupName: string
 }
 
 export class GetParkingMapListDto {
-  parkingMaps: GetParkingMapListItemDto[];
+  parkingMaps: GetParkingMapListItemDto[]
 }

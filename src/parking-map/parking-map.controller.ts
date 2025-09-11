@@ -9,11 +9,11 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
-} from '@nestjs/common';
+} from '@nestjs/common'
 
-import { ParkingMapService } from './parking-map.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { GetPakingMapListDto } from './dto/get-parking-map-list.dto';
+import type { ParkingMapService } from './parking-map.service'
+import { FileInterceptor } from '@nestjs/platform-express'
+import type { GetParkingMapListDto } from './dto/get-parking-map-list.dto'
 
 @Controller('parking-maps')
 export class ParkingMapsController {
@@ -23,13 +23,13 @@ export class ParkingMapsController {
   async getMapList(
     @Query('groupName')
     groupName?: string,
-  ): Promise<GetPakingMapListDto> {
-    return await this.parkingMapService.getMapList(groupName);
+  ): Promise<GetParkingMapListDto> {
+    return await this.parkingMapService.getMapList(groupName)
   }
 
   @Get('/:id')
   async getMap(@Param('id') id: number) {
-    return await this.parkingMapService.findOne(id);
+    return await this.parkingMapService.findOne(id)
   }
 
   @Post()
@@ -39,7 +39,7 @@ export class ParkingMapsController {
     @Body('groupName') groupName: string,
     @Body('mapName') mapName: string,
   ) {
-    await this.parkingMapService.create(image, groupName, mapName);
+    await this.parkingMapService.create(image, groupName, mapName)
   }
 
   @Patch('/:id')

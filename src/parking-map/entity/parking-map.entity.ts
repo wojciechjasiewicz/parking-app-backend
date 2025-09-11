@@ -1,21 +1,21 @@
-import { ParkingPlace } from './parking-place.entity';
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ParkingPlace } from "./parking-place.entity";
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
 @Entity()
 export class ParkingMap {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "varchar", length: 255 })
   name: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 255 })
   groupName: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 255 })
   fileType: string;
 
-  @Column({ type: 'bytea' })
+  @Column({ type: "bytea" })
   data: Buffer;
 
   @OneToMany(() => ParkingPlace, (parkingPlace) => parkingPlace.parkingMap)

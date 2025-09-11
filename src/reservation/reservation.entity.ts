@@ -1,16 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @Entity()
 export class Reservation {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  parkingPlaceId: number;
+  parkingPlaceId: number
 
   @Column()
-  userId: number;
+  userId: number
 
   @Column()
-  date: Date;
+  date: Date
 }

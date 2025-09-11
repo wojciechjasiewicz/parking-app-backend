@@ -1,17 +1,17 @@
 export class GetParkingMapDto {
-  id: number;
+  id: number
 
-  name: string;
-  groupName: string;
+  name: string
+  groupName: string
 
-  fileType: string;
+  fileType: string
 
-  data: string;
+  data: string
 
   parkingPlaces: {
-    id: number;
-    label: string;
-    positionX: number;
-    positionY: number;
-  }[] = [];
+    id: number
+    label: string
+    positionX: number
+    positionY: number
+  }[] = []
 }

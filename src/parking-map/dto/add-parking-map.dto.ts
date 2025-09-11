@@ -1,10 +1,10 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator'
 export class AddParkingMapDto {
   @IsNotEmpty()
   @IsString()
-  name!: string;
+  name!: string
 
   @IsNotEmpty()
   @IsString()
-  svgData!: string;
+  svgData!: string
 }

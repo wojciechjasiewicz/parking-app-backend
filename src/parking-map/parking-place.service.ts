@@ -2,15 +2,15 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+} from '@nestjs/common'
+import type { Repository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
 
-import { ParkingPlace } from './entity/parking-place.entity';
-import { CreateParkingPlaceDto } from './dto/create-parking-place.dto';
-import { ParkingMap } from './entity/parking-map.entity';
-import { UpdateParkingPlaceDto } from './dto/update-parking-place.dto';
-import { GetParkingPlaceDto } from './dto/get-parking-place.dto';
+import { ParkingPlace } from './entity/parking-place.entity'
+import type { CreateParkingPlaceDto } from './dto/create-parking-place.dto'
+import { ParkingMap } from './entity/parking-map.entity'
+import type { UpdateParkingPlaceDto } from './dto/update-parking-place.dto'
+import type { GetParkingPlaceDto } from './dto/get-parking-place.dto'
 
 @Injectable()
 export class ParkingPlacesService {
@@ -24,22 +24,22 @@ export class ParkingPlacesService {
   async findAll(mapId?: number): Promise<ParkingPlace[]> {
     const parkingPlaces = await this.parkingPlaceRepository.find({
       where: { parkingMap: { id: mapId } },
-    });
+    })
 
-    return parkingPlaces;
+    return parkingPlaces
   }
 
   async getOne(id: number): Promise<GetParkingPlaceDto> {
     const place = await this.parkingPlaceRepository.findOne({
       select: { id: true, label: true, positionX: true, positionY: true },
       where: { id },
-    });
+    })
 
     if (!place) {
-      throw new NotFoundException(`Parking place ${id} not found`);
+      throw new NotFoundException(`Parking place ${id} not found`)
     }
 
-    return place;
+    return place
   }
 
   async createOne({
@@ -50,10 +50,10 @@ export class ParkingPlacesService {
   }: CreateParkingPlaceDto) {
     const parkingMap = await this.parkingMapRepository.findOne({
       where: { id: mapId },
-    });
+    })
 
     if (!parkingMap) {
-      throw new NotFoundException(`Parking map ${mapId} doesn't exist`);
+      throw new NotFoundException(`Parking map ${mapId} doesn't exist`)
     }
 
     const parkingPlace = await this.parkingPlaceRepository.create({
@@ -61,10 +61,10 @@ export class ParkingPlacesService {
       positionX,
       positionY,
       parkingMap,
-    });
+    })
 
-    const result = await this.parkingPlaceRepository.save(parkingPlace);
-    return result.id;
+    const result = await this.parkingPlaceRepository.save(parkingPlace)
+    return result.id
   }
 
   async update(
@@ -73,10 +73,10 @@ export class ParkingPlacesService {
   ): Promise<Required<UpdateParkingPlaceDto>> {
     const place = await this.parkingPlaceRepository.findOne({
       where: { id },
-    });
+    })
 
     if (!place) {
-      throw new BadRequestException(`Parking place ${id} not found`);
+      throw new BadRequestException(`Parking place ${id} not found`)
     }
 
     return await this.parkingPlaceRepository.save({
@@ -84,20 +84,20 @@ export class ParkingPlacesService {
       label,
       positionX,
       positionY,
-    });
+    })
   }
 
   async deleteOne(id: number) {
-    console.log(`Delete parking place: ${id}`);
+    console.log(`Delete parking place: ${id}`)
     const place = await this.parkingPlaceRepository.findOne({
       where: { id },
-    });
+    })
 
     if (!place) {
-      throw new NotFoundException(`Parking place ${id} not found`);
+      throw new NotFoundException(`Parking place ${id} not found`)
     }
 
-    await this.parkingPlaceRepository.delete(id);
-    return id;
+    await this.parkingPlaceRepository.delete(id)
+    return id
   }
 }

@@ -4,12 +4,13 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
-} from '@nestjs/common';
-import { ReservationsService } from './reservations.service';
-import { Reservation } from './reservation.entity';
-import { CreateReservationDto } from './create-reservation.dto';
+} from '@nestjs/common'
+import type { ReservationsService } from './reservations.service'
+import type { Reservation } from './reservation.entity'
+import type { CreateReservationDto } from './create-reservation.dto'
 
 @Controller('reservations')
 export class ReservationsController {
@@ -17,21 +18,23 @@ export class ReservationsController {
 
   @Get()
   async getReservationList(
-    @Query('placeId') parkingPlaceId: string,
+    @Query('placeId', ParseIntPipe) parkingPlaceId: number,
   ): Promise<Reservation[]> {
-    return await this.reservationsService.findAll(parkingPlaceId);
+    return await this.reservationsService.findAll(parkingPlaceId)
   }
 
   @Post()
   async createReservation(
     @Body() reservation: CreateReservationDto,
   ): Promise<number> {
-    return await this.reservationsService.createOne(reservation);
+    return await this.reservationsService.createOne(reservation)
   }
 
   @Delete(':id')
-  async deleteReservation(@Param('id') reservationId: number): Promise<string> {
-    const id = await this.reservationsService.deleteOne(reservationId);
-    return `${id}`;
+  async deleteReservation(
+    @Param('id', ParseIntPipe) reservationId: number,
+  ): Promise<string> {
+    const id = await this.reservationsService.deleteOne(reservationId)
+    return `${id}`
   }
 }

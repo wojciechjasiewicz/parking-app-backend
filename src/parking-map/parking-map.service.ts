@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common'
 
-import { ParkingMap } from './entity/parking-map.entity';
-import { Repository } from 'typeorm';
-import { GetParkingMapListDto } from './dto/get-parking-map-list.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { GetParkingMapDto } from './dto/get-parking-map.dto';
+import { ParkingMap } from './entity/parking-map.entity'
+import type { Repository } from 'typeorm'
+import type { GetParkingMapListDto } from './dto/get-parking-map-list.dto'
+import { InjectRepository } from '@nestjs/typeorm'
+import type { GetParkingMapDto } from './dto/get-parking-map.dto'
 
 @Injectable()
 export class ParkingMapService {
@@ -17,7 +17,7 @@ export class ParkingMapService {
     const parkingMaps = await this.parkingMapsRepository.find({
       select: { id: true, name: true, groupName: true },
       where: { groupName },
-    });
+    })
 
     return {
       parkingMaps: parkingMaps.map(({ id, name, groupName }) => ({
@@ -25,7 +25,7 @@ export class ParkingMapService {
         name,
         groupName,
       })),
-    };
+    }
   }
 
   async findOne(id: number): Promise<GetParkingMapDto> {
@@ -39,13 +39,13 @@ export class ParkingMapService {
       },
       relations: { parkingPlaces: true },
       where: { id },
-    });
+    })
 
     if (!parkingMap) {
-      throw new NotFoundException(`Missing parking map: ${id}`);
+      throw new NotFoundException(`Missing parking map: ${id}`)
     }
 
-    return { ...parkingMap, data: parkingMap.data.toString('base64') };
+    return { ...parkingMap, data: parkingMap.data.toString('base64') }
   }
 
   async create(
@@ -55,12 +55,12 @@ export class ParkingMapService {
   ): Promise<number> {
     const parkingMap = await this.parkingMapsRepository.findOne({
       where: { name: mapName, groupName },
-    });
+    })
 
     if (parkingMap) {
       throw new Error(
         `Parking map ${mapName} in group ${groupName} already exists`,
-      );
+      )
     }
 
     const newParkingMap = await this.parkingMapsRepository.create({
@@ -68,21 +68,21 @@ export class ParkingMapService {
       fileType: imageMap.mimetype,
       data: imageMap.buffer,
       groupName,
-    });
+    })
 
-    const { id } = await this.parkingMapsRepository.save(newParkingMap);
-    return id;
+    const { id } = await this.parkingMapsRepository.save(newParkingMap)
+    return id
   }
 
   async delete(id: number): Promise<void> {
     const parkingMap = await this.parkingMapsRepository.findOne({
       where: { id },
-    });
+    })
 
     if (!parkingMap) {
-      throw new NotFoundException(`Missing parking map: ${id}`);
+      throw new NotFoundException(`Missing parking map: ${id}`)
     }
 
-    await this.parkingMapsRepository.delete(id);
+    await this.parkingMapsRepository.delete(id)
   }
 }
