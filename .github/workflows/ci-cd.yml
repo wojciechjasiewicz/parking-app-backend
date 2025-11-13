@@ -71,17 +71,17 @@ jobs:
           path: dist/
   
   release:
-  needs: build
-  runs-on: ubuntu-latest
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # provided automatically by GitHub
-  steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v4
-      with: { name: dist }
-    - id: create_release
-      uses: elgohr/Github-Release-Action@v5
-      with:
-        title: Dev Build ${{ github.sha }}
-        tag: dev-${{ github.sha }}
-        prerelease: true
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # provided automatically by GitHub
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v4
+        with: { name: dist }
+      - id: create_release
+        uses: elgohr/Github-Release-Action@v5
+        with:
+          title: Dev Build ${{ github.sha }}
+          tag: dev-${{ github.sha }}
+          prerelease: true
